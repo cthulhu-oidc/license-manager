@@ -1,14 +1,7 @@
-import { stringify } from "./stringify";
+import { normalizeLicense } from './normalizeLicense';
+import { isPrototypeKeyword } from "./isPrototypeKeyword";
 
 type Template = string;
-
-const prototypeKeywords = <const>['constructor', 'prototype', '__proto__']
-function isPrototypeKeyword(key: unknown): key is typeof prototypeKeywords[number] {
-  return (
-    typeof key === 'string' &&
-    prototypeKeywords.indexOf(key as typeof prototypeKeywords[number]) !== -1
-  )
-}
 
 export type License<T = any> = T extends any
   ? { serial?: never;[key: string]: any; }
@@ -41,27 +34,6 @@ function _generateRenderer<T>(template: Template): Renderer<T> {
   return new Function('data', fnBody) as Renderer<T>; // eslint-disable-line @typescript-eslint/no-implied-eval
 }
 
-function _prepareDataObject<T>(data: Readonly<{ [key: string]: any; }>) {
-
-  const result = {} as Record<string, string>;
-
-  for (const property in data) {
-    if (isPrototypeKeyword(property)) {
-      continue;
-    }
-
-    /* eslint-disable security/detect-object-injection */
-    Object.prototype.hasOwnProperty.call(data, property) && (
-      result[property] = typeof data[property] === 'string'
-        ? data[property] as unknown as string
-        : stringify(data[property])
-    );
-    /* eslint-enable */
-  }
-
-  return result as Record<keyof T, string>;
-}
-
 export class LicenseTemplate<T> {
   private template: Template;
   private _render: Renderer<T>;
@@ -85,7 +57,7 @@ export class LicenseTemplate<T> {
   }
 
   render(data: Readonly<T & { serial: string }>): string {
-    return this._render(_prepareDataObject(data));
+    return this._render(normalizeLicense<T>(data as T));
   }
 
   parse(license: string) {

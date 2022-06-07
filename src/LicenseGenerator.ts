@@ -3,6 +3,7 @@ import { createSign, createVerify } from "crypto";
 import { stringify } from './stringify';
 import { License, LicenseTemplate } from './LicenseTemplate';
 import { LRUCache } from "mnemonist";
+import { normalizeLicense } from './normalizeLicense';
 
 const algorithms = <const>[
   'RSA-MD5',
@@ -40,14 +41,6 @@ type DataOptions<T = any> = {
 }
 
 type AlgorithmOptions = { algorithm?: Algorithm; };
-
-const prototypeKeywords = <const>['constructor', 'prototype', '__proto__']
-function isPrototypeKeyword(key: unknown): key is typeof prototypeKeywords[number] {
-  return (
-    typeof key === 'string' &&
-    prototypeKeywords.indexOf(key as typeof prototypeKeywords[number]) !== -1
-  )
-}
 
 export class LicenseGenerator<T = {[key:string]: any; }> {
   private template: LicenseTemplate<T>;
@@ -100,7 +93,7 @@ export class LicenseGenerator<T = {[key:string]: any; }> {
       throw new Error('License::generate::data.serial is not allowed');
     }
     const serial = createSign(this.algorithm)
-      .update(stringify(_prepareDataObject(options.data)))
+      .update(stringify(normalizeLicense(options.data)))
       .sign(this.privateKey, 'base64');
 
     return this.template
@@ -169,24 +162,6 @@ export class LicenseGenerator<T = {[key:string]: any; }> {
       throw e;
     }
   }
-}
-
-function _prepareDataObject(data: Readonly<License>) {
-
-  const result = {} as License;
-
-  for (const property in data) {
-    if (isPrototypeKeyword(property)) {
-      continue;
-    }
-    /* eslint-disable security/detect-object-injection */
-    Object.prototype.hasOwnProperty.call(data, property) && (
-      result[property] = typeof data[property] === 'string' ? data[property] as string : stringify(data[property])
-    );
-    /* eslint-enable */
-  }
-
-  return result;
 }
 
 export default LicenseGenerator;
