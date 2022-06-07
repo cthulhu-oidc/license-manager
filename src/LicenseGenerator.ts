@@ -179,10 +179,11 @@ function _prepareDataObject(data: Readonly<License>) {
     if (isPrototypeKeyword(property)) {
       continue;
     }
-
+    /* eslint-disable security/detect-object-injection */
     Object.prototype.hasOwnProperty.call(data, property) && (
       result[property] = typeof data[property] === 'string' ? data[property] as string : stringify(data[property])
     );
+    /* eslint-enable */
   }
 
   return result;

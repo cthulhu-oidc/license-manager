@@ -24,6 +24,7 @@ function _stringifyObject(node: Readonly<Record<string | number, any>>, level: n
   const out = [];
 
   for (const key of keys) {
+    // eslint-disable-next-line security/detect-object-injection
     const value = _stringify(node[key], level + 1, seen);
 
     if (!value) continue;
