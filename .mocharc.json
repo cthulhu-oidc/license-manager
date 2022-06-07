@@ -1,0 +1,8 @@
+{
+  "extension": ["spec.ts", "spec.js"],
+  "package": "./package.json",
+  "reporter": "spec",
+  "slow": "75",
+  "timeout": "2000",
+  "ui": "bdd"
+}

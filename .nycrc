@@ -5,16 +5,22 @@
 	"include": [
 		"src"
 	],
+	"cache": false,
 	"extension": [
-		".ts",
-		".tsx"
+		".ts"
 	],
 	"exclude": [
-		"**/*.d.ts"
+		"**/*.d.ts",
+		"**/*.spec.ts"
 	],
+	"require": [
+		"ts-node/register"
+	],
+	"cwd": "./",
 	"reporter": [
 		"text",
 		"lcov",
+		"text-lcov",
 		"text-summary"
 	],
 		"branches": 100,
