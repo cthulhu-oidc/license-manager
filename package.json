@@ -15,9 +15,9 @@
 		"lint:fix": "eslint --fix .",
 		"test": "npm run test:logic && npm run test:types",
 		"test:logic": "npm run test:logic:unit",
-		"test:logic:unit": "tsc -p ./tsconfig.test.json && mocha './build/spec' --extension=spec.js --preserve-symlinks && npm run clean",
+		"test:logic:unit": "tsc -p ./tsconfig.test.json && mocha './build/spec' --preserve-symlinks && npm run clean",
 		"test:types": "npm run build:types && tsd && npm run clean",
-		"test:coverage": "npm run clean && tsc -p ./tsconfig.test.json && nyc mocha spec --extension=spec.ts && npm run clean"
+		"test:coverage": "npm run clean && tsc -p ./tsconfig.test.json && nyc mocha spec && npm run clean"
 	},
 	"devDependencies": {
 		"@istanbuljs/nyc-config-typescript": "1.0.2",
@@ -36,6 +36,7 @@
 		"eslint-plugin-sonarjs": "0.13.0",
 		"mocha": "10.0.0",
 		"nyc": "15.1.0",
+		"nyc-report-lcov-absolute": "^1.0.0",
 		"rimraf": "3.0.2",
 		"tinybench": "^1.0.2",
 		"ts-node": "10.8.1",
