@@ -1,4 +1,3 @@
-import { normalizeLicense } from './normalizeLicense';
 import { isPrototypeKeyword } from "./isPrototypeKeyword";
 
 type Template = string;
@@ -56,8 +55,8 @@ export class LicenseTemplate<T> {
     this._render = _generateRenderer<T>(this.template);
   }
 
-  render(data: Readonly<T & { serial: string }>): string {
-    return this._render(normalizeLicense<T>(data as T));
+  render(data: Readonly<Record<keyof T, string>>): string {
+    return this._render(data);
   }
 
   parse(license: string) {

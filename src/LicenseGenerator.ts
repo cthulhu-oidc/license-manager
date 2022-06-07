@@ -33,7 +33,7 @@ type LicenseKeyOptions = KeyOrPath<"license">;
 type TemplateOptions = KeyOrPath<"template">;
 type CacheSize = { cacheSize?: number };
 
-type DataOptions<T = any> = {
+type DataOptions<T = { [key: string]: any; }> = {
   /**
    * data to sign
    */
@@ -42,7 +42,9 @@ type DataOptions<T = any> = {
 
 type AlgorithmOptions = { algorithm?: Algorithm; };
 
-export class LicenseGenerator<T = {[key:string]: any; }> {
+type ParseResult<T> = { valid: boolean; serial: string; data: Record<keyof T, string>; };
+
+export class LicenseGenerator<T = { [key: string]: any; }> {
   private template: LicenseTemplate<T>;
   private algorithm: Algorithm;
   private publicKey = '';
@@ -59,7 +61,7 @@ export class LicenseGenerator<T = {[key:string]: any; }> {
     }
 
     this.lruCache = typeof options.cacheSize === 'number'
-      ? new LRUCache<string, [Error, null] | [null, ReturnType<typeof this.parse>]>(options.cacheSize)
+      ? new LRUCache<string, [Error, null] | [null, ParseResult<T>]>(options.cacheSize)
       : undefined;
 
     this.algorithm = options.algorithm && algorithms.indexOf(options.algorithm) !== -1
@@ -92,13 +94,15 @@ export class LicenseGenerator<T = {[key:string]: any; }> {
     if ('serial' in options.data && Object.prototype.hasOwnProperty.call(options.data, 'serial')) {
       throw new Error('License::generate::data.serial is not allowed');
     }
+
+    const normalizedLicense = normalizeLicense<T>(options.data);
     const serial = createSign(this.algorithm)
-      .update(stringify(normalizeLicense(options.data)))
+      .update(stringify(normalizedLicense))
       .sign(this.privateKey, 'base64');
 
     return this.template
       .render({
-        ...(options.data as unknown as T),
+        ...normalizedLicense,
         serial
       });
   }
@@ -106,7 +110,7 @@ export class LicenseGenerator<T = {[key:string]: any; }> {
   /**
    * Parse license file
    */
-  public parse<T = any>(options: Readonly<LicenseKeyOptions>): { valid: boolean; serial: string; data: Record<keyof T, string>; } {
+  public parse(options: Readonly<LicenseKeyOptions>): ParseResult<T> {
 
     let license;
     if (typeof options.license === 'string') {
@@ -121,12 +125,12 @@ export class LicenseGenerator<T = {[key:string]: any; }> {
       this.lruCache &&
       this.lruCache.has(license)
     ) {
-      const cached = this.lruCache.get(license) as unknown as [Error, null] | [null, ReturnType<typeof this.parse>];
+      const cached = this.lruCache.get(license)!;
 
       if (cached[0] !== null) {
         throw cached[0];
-      } 
-      return cached[1] as unknown as { valid: boolean; serial: string; data: Record<keyof T, string>; };
+      }
+      return cached[1];
     }
     try {
 
@@ -147,13 +151,13 @@ export class LicenseGenerator<T = {[key:string]: any; }> {
           {
             valid,
             serial,
-            data: data as unknown as Record<keyof T, string>,
+            data,
           }]);
       }
       return {
         valid,
         serial,
-        data: data as unknown as Record<keyof T, string>,
+        data,
       };
     } catch (e) {
       if (this.lruCache) {

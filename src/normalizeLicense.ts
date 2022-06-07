@@ -14,7 +14,7 @@ export function normalizeLicense<T>(data: Readonly<License>) {
     /* eslint-disable security/detect-object-injection */
     Object.prototype.hasOwnProperty.call(data, property) && (
       result[property] = typeof data[property] === 'string'
-        ? data[property] as unknown as string
+        ? data[property] as string
         : stringify(data[property])
     );
     /* eslint-enable */

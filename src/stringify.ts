@@ -1,4 +1,4 @@
-function _stringifyArray(arr: Readonly<Array<Readonly<Record<string | number, any>>>>, level: number, seen: Readonly<Set<any>>) {
+function _stringifyArray(arr: Readonly<Array<Readonly<Record<string | number, any>>>>, level: number, seen: Readonly<Set<unknown>>) {
   const out = [];
   for (const node of arr) {
     out.push(_stringify(node, level + 1, seen) || JSON.stringify(null));
@@ -13,7 +13,7 @@ function _isObject(node: unknown): node is Record<string | number | symbol, any>
   )
 }
 
-function _stringifyObject(node: Readonly<Record<string | number, any>>, level: number, seen: Readonly<Set<any>>) {
+function _stringifyObject(node: Readonly<Record<string | number, any>>, level: number, seen: Readonly<Set<unknown>>) {
   if (seen.has(node)) {
     throw new TypeError('Converting circular structure to JSON');
   }
@@ -44,7 +44,7 @@ function _hasToJSON(node: unknown): node is ({ toJSON: () => string }) {
   );
 }
 
-function _stringify(node: any, level: number, seen: Readonly<Set<any>>): string {
+function _stringify(node: any, level: number, seen: Readonly<Set<unknown>>): string {
   if (_hasToJSON(node)) {
     node = node.toJSON();
   }
@@ -62,7 +62,7 @@ function _stringify(node: any, level: number, seen: Readonly<Set<any>>): string 
   }
 }
 
-function stringify(obj: any): string {
+function stringify(obj: unknown): string {
   return _stringify(obj, 0, new Set());
 }
 
