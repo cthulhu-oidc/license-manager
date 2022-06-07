@@ -1,7 +1,7 @@
 {
   "root": true,
   "ignorePatterns": [
-    "benchmarks.js",
+    "benchmark.js",
     "spec",
     "node_modules",
     "dist",
