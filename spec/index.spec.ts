@@ -78,7 +78,7 @@ TA62q/YD0ODjrkyGOyXxjg5HcYiT7qpA+l5MFTS2sNGsc+7jhyinkbc90nsKUgRy
 4Hz0wKRI3kfC0kgvQp+C2hqhAE19D7rgXnfCbchyEVvu3y5MUnIXTKs5SXcdaycM
 ws77PNEfPykddJNeFtlH8K9vr8ohRQO8L4sKewzn2jB+KIenCs2FrsI7MskYIT2P
 JQIDAQAB
------END PUBLIC KEY-----`
+-----END PUBLIC KEY-----`;
 
 before(() => {
   writeFileSync(__dirname + '/private_key.pem', rsaPrivateKey);

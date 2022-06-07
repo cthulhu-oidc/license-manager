@@ -92,20 +92,20 @@ const licenseTemplate = new LicenseTemplate({
 // add tests
 suite
   .add('parseLicense', function () {
-    const data = licenseTemplate.parse(license);
+    licenseTemplate.parse(license);
   })
   .add('parse', function () {
-    const data = licenseGenerator.parse({
+    licenseGenerator.parse({
       license: license
     });
   })
   .add('parse', function () {
-    const data = licenseGeneratorWithCache.parse({
+    licenseGeneratorWithCache.parse({
       license: license
     });
   })
   .add('generate', function () {
-    const data = licenseGenerator.generate({
+    licenseGenerator.generate({
       data: {
         licenseVersion: LICENSE_VERSION,
         applicationVersion: APPLICATION_VERSION,

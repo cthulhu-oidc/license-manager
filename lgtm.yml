@@ -1,0 +1,5 @@
+path_classifiers:
+  source:
+    - src
+  spec:
+    - spec
