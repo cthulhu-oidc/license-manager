@@ -1,9 +1,6 @@
-# Created by .ignore support plugin (hsz.mobi)
-
-# Idea project files
-.idea
-*.iml
-
-# NPM stuff
-npm-debug.log
-node_modules
+/node_modules
+/build
+/dist
+/types
+/coverage
+/.nyc_output

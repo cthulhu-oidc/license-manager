@@ -1,0 +1,51 @@
+{
+  "root": true,
+  "ignorePatterns": [
+    "benchmarks.js",
+    "spec",
+    "node_modules",
+    "dist",
+    "coverage",
+    "build",
+    "scripts",
+    "types"
+  ],
+  "$schema": "https://json.schemastore.org/eslintrc.json",
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.eslint.json"
+  },
+  "plugins": [
+    "import",
+    "promise",
+    "@typescript-eslint",
+    "security",
+    "security-node",
+    "sonarjs"
+  ],
+  "rules": {
+    "no-empty": [
+      "warn",
+      {
+        "allowEmptyCatch": true
+      }
+    ],
+    "import/no-unresolved": 0,
+    "@typescript-eslint/ban-ts-comment": 0,
+    "@typescript-eslint/no-useless-empty-export": 2,
+    "@typescript-eslint/non-nullable-type-assertion-style": 2,
+    "@typescript-eslint/parameter-properties": 2,
+    "@typescript-eslint/prefer-readonly-parameter-types": 2,
+    "@typescript-eslint/strict-boolean-expressions": "error"
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:promise/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:security/recommended",
+    "plugin:security-node/recommended",
+    "plugin:sonarjs/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings"
+  ]
+}
