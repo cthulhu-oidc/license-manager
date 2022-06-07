@@ -5,6 +5,7 @@
 	"main": "./dist/index.js",
 	"types": "./types/index.d.ts",
 	"scripts": {
+		"benchmark": "npm run build:node && node benchmark.js",
 		"build": "npm run clean && npm run build:node && npm run build:types",
 		"build:node": "tsc -p .",
 		"build:types": "dts-bundle-generator -o ./types/index.d.ts ./src/index.ts --project ./tsconfig.types.json  --no-check --disable-symlinks-following ",
@@ -23,8 +24,8 @@
 		"@types/chai": "4.3.1",
 		"@types/mocha": "9.1.1",
 		"@types/node": "17.0.40",
-		"@typescript-eslint/parser": "5.27.1",
 		"@typescript-eslint/eslint-plugin": "5.27.1",
+		"@typescript-eslint/parser": "5.27.1",
 		"chai": "4.3.6",
 		"dts-bundle-generator": "6.11.0",
 		"eslint": "8.17.0",

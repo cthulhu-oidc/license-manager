@@ -1,6 +1,5 @@
 const Benchmark = require('tinybench');
 const LicenseGenerator = require('./dist/index').LicenseGenerator;
-const LicenseTemplate = require('./dist/LicenseTemplate').LicenseTemplate;
 
 const LICENSE_VERSION = '1';
 const APPLICATION_VERSION = '1.0.0';
@@ -85,21 +84,13 @@ const licenseGeneratorWithCache = new LicenseGenerator({
   privateKey: rsaPrivateKey,
 });
 
-const licenseTemplate = new LicenseTemplate({
-  template,
-});
-
-// add tests
 suite
-  .add('parseLicense', function () {
-    licenseTemplate.parse(license);
-  })
   .add('parse', function () {
     licenseGenerator.parse({
       license: license
     });
   })
-  .add('parse', function () {
+  .add('parse (cached)', function () {
     licenseGeneratorWithCache.parse({
       license: license
     });
