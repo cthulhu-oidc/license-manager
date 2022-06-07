@@ -14,7 +14,7 @@ export type License<T = any> = T extends any
   ? { serial?: never;[key: string]: any; }
   : Omit<T, 'serial'> & { serial?: never; };
 
-type Renderer<T> = (data: Record<keyof T, string>) => string;
+type Renderer<T> = (data: Record<keyof T, string>) => string; // eslint-disable-line no-unused-vars
 
 const tokenRE = /{{(\w+)}}/g;
 const tokenSplitterRE = /(\{\{\w+?\}\})/g
@@ -38,7 +38,7 @@ function _generateRenderer<T>(template: Template): Renderer<T> {
     }
   }
   fnBody += '`';
-  return new Function('data', fnBody) as Renderer<T>;
+  return new Function('data', fnBody) as Renderer<T>; // eslint-disable-line @typescript-eslint/no-implied-eval
 }
 
 function _prepareDataObject<T>(data: Readonly<{ [key: string]: any; }>) {
@@ -50,11 +50,13 @@ function _prepareDataObject<T>(data: Readonly<{ [key: string]: any; }>) {
       continue;
     }
 
+    /* eslint-disable security/detect-object-injection */
     Object.prototype.hasOwnProperty.call(data, property) && (
       result[property] = typeof data[property] === 'string'
         ? data[property] as unknown as string
         : stringify(data[property])
     );
+    /* eslint-enable */
   }
 
   return result as Record<keyof T, string>;
@@ -69,9 +71,10 @@ export class LicenseTemplate<T> {
   constructor(options: Readonly<{ template: Template }>) {
     this.template = options.template;
 
+    // eslint-disable-next-line security/detect-non-literal-regexp, security-node/non-literal-reg-expr
     this._templateRE = new RegExp(this.template.replace(tokenRE, '(.*)'));
     this._templateTokens = [...this.template.matchAll(tokenRE)]
-      .map((match) => match[1]);
+      .map((match) => match[1]); // eslint-disable-line @typescript-eslint/prefer-readonly-parameter-types
 
     for (const templateToken of this._templateTokens) {
       if (isPrototypeKeyword(templateToken)) {
@@ -98,9 +101,11 @@ export class LicenseTemplate<T> {
     for (const templateToken of this._templateTokens) {
       ++i;
       if (templateToken === 'serial') {
+        // eslint-disable-next-line security/detect-object-injection
         serial = result[i];
         continue;
       }
+      // eslint-disable-next-line security/detect-object-injection
       data[templateToken as keyof T] = result[i];
     }
 
