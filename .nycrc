@@ -20,7 +20,6 @@
 	"reporter": [
 		"text",
 		"lcov",
-		"text-lcov",
 		"text-summary"
 	],
 		"branches": 100,
