@@ -49,7 +49,7 @@ function isPrototypeKeyword(key: unknown): key is typeof prototypeKeywords[numbe
   )
 }
 
-export class LicenseGenerator<T> {
+export class LicenseGenerator<T = {[key:string]: any; }> {
   private template: LicenseTemplate<T>;
   private algorithm: Algorithm;
   private publicKey = '';
