@@ -19,7 +19,8 @@
 	"cwd": "./",
 	"reporter": [
 		"text",
-		"nyc-report-lcov-absolute",
+		"lcov",
+		"text-lcov",
 		"text-summary"
 	],
 		"branches": 100,
