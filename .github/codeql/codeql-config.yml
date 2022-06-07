@@ -1,0 +1,6 @@
+name: "CodeQL config"
+
+languages: 
+  - 'typescript'
+paths:
+  - src

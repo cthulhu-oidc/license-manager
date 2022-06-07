@@ -1,0 +1,54 @@
+name: CI
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/ci.yml'
+      - 'package.json'
+      - 'src'
+      - 'spec'
+
+  push:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/ci.yml'
+      - 'package.json'
+      - 'src'
+      - 'spec'
+
+  workflow_dispatch:
+    inputs:
+      licenseCheck:
+        description: 'Check Licenses'     
+        required: false
+        type: boolean
+        default: true
+      lint:
+        description: 'Lint'     
+        required: false
+        type: boolean
+        default: true
+      logic:
+        description: 'Test Logic'     
+        required: false
+        type: boolean
+        default: true
+      types:
+        description: 'Test Types'     
+        required: false
+        type: boolean
+        default: true
+      coverage:
+        description: 'Code Coverage'     
+        required: false
+        type: boolean
+        default: true
+jobs:
+  ci:
+    uses: cthulhu-oidc/workflows/.github/workflows/ci.yml@master
+    with:
+      licenseCheck: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.licenseCheck == 'true') || github.event_name != 'workflow_dispatch' }}
+      lint: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.lint == 'true') || github.event_name != 'workflow_dispatch' }}
+      logic: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.logic == 'true') || github.event_name != 'workflow_dispatch' }}
+      types: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.types == 'true') || github.event_name != 'workflow_dispatch' }}
+      coverage: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.coverage == 'true') || github.event_name != 'workflow_dispatch' }}

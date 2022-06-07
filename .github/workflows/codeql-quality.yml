@@ -1,0 +1,32 @@
+name: "CodeQL with Quality"
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+
+    permissions:
+      # required for all workflows
+      security-events: write
+
+      # only required for workflows in private repositories
+      actions: read
+      contents: read
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3.0.2
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2.1.9
+      with:
+        config-file: ./.github/codeql/codeql-config.yml
+        queries: security-extended
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2.1.9
