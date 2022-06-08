@@ -10,6 +10,7 @@ on:
   push:
     branches:
       - master
+      - main
     paths:
       - '.github/workflows/ci.yml'
       - 'package.json'
