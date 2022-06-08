@@ -44,7 +44,7 @@ function _hasToJSON(node: unknown): node is ({ toJSON: () => string }) {
   );
 }
 
-function _stringify(node: any, level: number, seen: Readonly<Set<unknown>>): string {
+function _stringify(node: unknown, level: number, seen: Readonly<Set<unknown>>): string {
   if (_hasToJSON(node)) {
     node = node.toJSON();
   }
