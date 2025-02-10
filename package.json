@@ -73,6 +73,6 @@
 	},
 	"homepage": "https://github.com/cthulhu-oidc/olsontimezone#readme",
 	"dependencies": {
-		"mnemonist": "^0.39.2"
+		"mnemonist": "^0.40.2"
 	}
 }
